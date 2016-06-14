@@ -79,21 +79,30 @@ public class ActividadPrincipal extends AppCompatActivity {
             Toast.makeText(this, "No hay nada para listar", Toast.LENGTH_SHORT).show();
         }
         else {
-            Intent intent = new Intent(this, ActividadListView.class);
-            intent.putExtra("listaproductos", listaproductos);
-            startActivityForResult(intent, REQUEST_LIST);
+            Lista();
         }
+    }
+
+    public void Lista(){
+        Intent intent = new Intent(this, ActividadListView.class);
+        intent.putExtra("listaproductos", listaproductos);
+        startActivityForResult(intent, REQUEST_LIST);
     }
     public void btnActualizar(View v) {
         if (posactual == -1) {
             Toast.makeText(this, "No hay nada para actualizar", Toast.LENGTH_SHORT).show();
         } else {
-            Producto p = listaproductos.get(posactual);
-            p.setCategoria(categoria.getSelectedItem().toString());
-            p.setDescripcion(descripcion.getText().toString());
-            p.setPrecio(Integer.valueOf(precio.getText().toString()));
-            p.setFoto(tvuri.getText().toString());
-            objactual.setText("Objeto Actual:"+posactual);
+            if (descripcion.getText().toString().isEmpty() || precio.getText().toString().isEmpty() || imagen.getDrawable() == null) {
+                Toast.makeText(this, "Campos incompletos", Toast.LENGTH_SHORT).show();
+            } else {
+                Producto p = listaproductos.get(posactual);
+                p.setCategoria(categoria.getSelectedItem().toString());
+                p.setDescripcion(descripcion.getText().toString());
+                p.setPrecio(Integer.valueOf(precio.getText().toString()));
+                p.setFoto(tvuri.getText().toString());
+                objactual.setText("Objeto Actual:" + posactual);
+                Toast.makeText(this, "Actualizado", Toast.LENGTH_SHORT).show();
+            }
         }
 
     }
@@ -113,6 +122,7 @@ public class ActividadPrincipal extends AppCompatActivity {
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse(p.getFoto()));
                 imagen.setImageBitmap(bitmap);
+                tvuri.setText(p.getFoto());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -146,9 +156,24 @@ public class ActividadPrincipal extends AppCompatActivity {
             objactual.setText("Objeto Actual:"+oa);
         }
     }
+    public void btnEliminar(View v) {
+        if (posactual == -1) {
+            Toast.makeText(this, "No se puede eliminar ahora.", Toast.LENGTH_SHORT).show();
+        } else {
+            Producto p = listaproductos.get(posactual);
+            listaproductos.remove(p);
+            descripcion.setText("");
+            precio.setText("");
+            imagen.setImageResource(0);
+            cantobj.setText("Cantidad de Objetos:"+listaproductos.size());
+            objactual.setText("Objeto Actual: -");
+
+        }
+    }
 
 
 
 
 
 }
+

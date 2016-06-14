@@ -23,19 +23,19 @@ public class ActividadListView extends AppCompatActivity {
 
         listaproductos = (ArrayList<Producto>) extras.getSerializable("listaproductos");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_view);
+        setContentView(R.layout.activity_actividad_list_view);
         listVW = (ListView) findViewById(R.id.listv);
         ProductosAdapter adapter = new ProductosAdapter(this,listaproductos);
         listVW.setAdapter(adapter);
         listVW.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-        public void onItemClick (AdapterView<?> adapter, View V, int position, long l){
-            Intent intent = new Intent();
-            intent.putExtra("pos",position);
-            setResult(RESULT_OK,intent);
-            finish();
-        }
+            public void onItemClick (AdapterView<?> adapter, View V, int position, long l){
+                Intent intent = new Intent();
+                intent.putExtra("pos",position);
+                setResult(RESULT_OK,intent);
+                finish();
+            }
 
-    });
+        });
     }
 
 }
